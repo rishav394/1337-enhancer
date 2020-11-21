@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+  "name": "Torrent helper",
+  "version": "2.0",
+  "description": "Adds a handy magnet link directly next to torrent list",
+  "icons": {
+    "16": "icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  },
+  "permissions": ["http://*/", "https://*/"],
+  "content_scripts": [
+    {
+      "matches": ["*://1337.root.yt/*"],
+      "js": ["dist/index.js"]
+    }
+  ]
+}
