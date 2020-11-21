@@ -8,11 +8,15 @@
     "48": "icon-48.png",
     "128": "icon-128.png"
   },
-  "permissions": ["http://*/", "https://*/"],
+  "permissions": ["http://*/", "https://*/", "contextMenus"],
   "content_scripts": [
     {
       "matches": ["*://1337.root.yt/*"],
       "js": ["dist/index.js"]
     }
-  ]
+  ],
+  "background": {
+    "persistent": false,
+    "scripts": ["dist/context.js"]
+  }
 }
