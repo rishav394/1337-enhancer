@@ -1,22 +1,41 @@
 {
   "manifest_version": 2,
   "name": "Torrent helper",
-  "version": "2.2",
-  "description": "Adds a handy magnet link directly next to torrent list",
+  "version": "2.3",
+  "description": "Adds a handy magnet link directly next to torrent list at https://1337.root.yt/",
   "icons": {
     "16": "icon-16.png",
     "48": "icon-48.png",
     "128": "icon-128.png"
   },
-  "permissions": ["http://*/", "https://*/", "contextMenus"],
+  "permissions": [
+    "*://1337.root.yt/*",
+    "*://1337x.to/*",
+    "*://1337x.st/*",
+    "*://x1337x.ws/*",
+    "*://x1337x.eu/*",
+    "*://x1337x.se/*",
+    "*://1337x.is/*",
+    "*://1337x.gd/*",
+    "contextMenus"
+  ],
   "content_scripts": [
     {
-      "matches": ["*://1337.root.yt/*"],
-      "js": ["dist/index.js"]
+      "matches": [
+        "*://1337.root.yt/*",
+        "*://1337x.to/*",
+        "*://1337x.st/*",
+        "*://x1337x.ws/*",
+        "*://x1337x.eu/*",
+        "*://x1337x.se/*",
+        "*://1337x.is/*",
+        "*://1337x.gd/*"
+      ],
+      "js": ["dist/content.js"]
     }
   ],
   "background": {
     "persistent": false,
-    "scripts": ["dist/context.js"]
+    "scripts": ["dist/background.js"]
   }
 }

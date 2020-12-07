@@ -2,17 +2,15 @@
   "name": "1337-ext",
   "version": "1.0.0",
   "scripts": {
-    "dev": "parcel watch src/index.ts src/context.ts",
-    "build": "parcel build src/index.ts src/context.ts"
+    "dev": "(rm -rf dist || true) && parcel watch src/background.ts src/content.ts",
+    "build": "(rm -rf dist || true) && parcel build src/background.ts src/content.ts"
   },
   "author": "rishav394",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.21.0",
     "jquery": "^3.5.1"
   },
   "devDependencies": {
-    "@types/axios": "^0.14.0",
     "@types/chrome": "0.0.126",
     "@types/jquery": "^3.5.4",
     "parcel-bundler": "^1.12.4",
