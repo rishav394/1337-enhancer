@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Torrent helper",
-  "version": "2.3",
+  "version": "2.4",
   "description": "Adds a handy magnet link directly next to torrent list at https://1337.root.yt/",
   "icons": {
     "16": "icon-16.png",

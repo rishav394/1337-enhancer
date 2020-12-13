@@ -8,3 +8,8 @@ export type ChromeMessage = {
   action: ChromeMessageActionType;
   info?: string;
 };
+
+export enum SortOrder {
+  ASCENDING = "ASCENDING",
+  DESCENDING = "DESCENDING",
+}

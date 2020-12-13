@@ -1,46 +1,28 @@
 import $ from "jquery";
-import { ChromeMessage, ChromeMessageActionType } from "./types";
+import { ChromeMessage, ChromeMessageActionType, SortOrder } from "./types";
 
 /**
  * Sort the table on the basis of the row
  * @param rowPosition Row position of the row being sorted
+ * @param ascending Controls the table sorting order.
+ * @param modifier A function which is called upon every row element before comparision
  */
-function sortTable(rowPosition: number) {
+function sortTable(
+  rowPosition: number,
+  sortOrder: SortOrder,
+  modifier: (text: string) => string | number | Date = (text: string) => text
+) {
   const rows = $("#mytable tbody tr").get();
 
   rows.sort(function (a, b) {
-    const A = Number($(a).children("td").eq(rowPosition).text());
-    const B = Number($(b).children("td").eq(rowPosition).text());
+    const A = modifier($(a).children("td").eq(rowPosition).text());
+    const B = modifier($(b).children("td").eq(rowPosition).text());
 
     if (A < B) {
-      return 1;
+      return sortOrder === SortOrder.ASCENDING ? -1 : 1;
     }
     if (A > B) {
-      return -1;
-    }
-    return 0;
-  });
-
-  $.each(rows, function (_index, row) {
-    $("#mytable").children("tbody").append(row);
-  });
-}
-
-/**
- * Sort the table on the basis of the uploader name
- */
-function sortTableUploader() {
-  const pos = 5;
-  const rows = $("#mytable tbody tr").get();
-  rows.sort(function (a, b) {
-    const A = $(a).children("td").eq(pos).text();
-    const B = $(b).children("td").eq(pos).text();
-
-    if (A < B) {
-      return 1;
-    }
-    if (A > B) {
-      return -1;
+      return sortOrder === SortOrder.ASCENDING ? 1 : -1;
     }
     return 0;
   });
@@ -79,9 +61,11 @@ function renderMagnetInDom(html: string, index: number) {
  * This function fetches magnets from the links and passes it down for rendering in the DOM
  */
 function fetchMagnets() {
-  const links = $<HTMLAnchorElement>("td.coll-1 a:not([class])");
+  const links = document.querySelectorAll<HTMLAnchorElement>(
+    "td.coll-1 a:not([class])"
+  );
 
-  links.each((index, link) => {
+  links.forEach((link, index) => {
     fetch(link.href).then(async (response) =>
       renderMagnetInDom(await response.text(), index)
     );
@@ -89,36 +73,112 @@ function fetchMagnets() {
 }
 
 /**
+ * Sort the table on the basis of the uploader name
+ */
+function sortTableViaUploader() {
+  sortTable(5, SortOrder.ASCENDING);
+}
+
+// TODO: WORK NEEDED
+/* function sortTableViaDate() {
+  const dateModifier = (text: string) => {
+    var fullDatePattern = /^(\d{1,2}):?(\d{1,2})?(pm|am)\s?(\w{3})?\.?\s?(\d{1,2})?(\w{2})?/;
+    var date = text.match(fullDatePattern);
+    if (!date) {
+      return text;
+    }
+    //  [
+    //  0 - '6pm Dec. 12th',
+    //  1 - '6',
+    //  2 - undefined,
+    //  3 - 'pm',
+    //  4 - 'Dec',
+    //  5 - '12',
+    //  6 - 'th',
+    //  index: 0,
+    //  input: '6pm Dec. 12th',
+    //  groups: undefined
+    // ]
+    // [
+    //  0 -> '12:01am',
+    //  1 -> '12',
+    //  2 -> '01',
+    //  3 -> 'am',
+    //  4 -> undefined,
+    //  5 -> undefined,
+    //  6 -> undefined,
+    //  index: 0,
+    //  input: '12:01am',
+    //  groups: undefined
+    // ]
+
+    if (date[6]) {
+      // It is a full date of the form "6pm Dec. 12th"
+      return Date.parse(`${date[1]} ${date[4]} 2020 `)
+    } else {
+      // It is a short time of the form "3:05pm"
+    }
+    var dt = new Date(text.replace(fullDatePattern, "$3-$2-$1"));
+  };
+}
+ */
+
+function sortTableViaSize() {
+  enum FileSize {
+    KB = "KB",
+    MB = "MB",
+    GB = "GB",
+  }
+
+  const fileSizeModifier = (text: string): string | number => {
+    if (text.includes(FileSize.KB)) {
+      return parseFloat(text.split(" ")[0].trim());
+    }
+    if (text.includes(FileSize.MB)) {
+      return parseFloat(text.split(" ")[0].trim()) * 1024;
+    }
+    if (text.includes(FileSize.GB)) {
+      return parseFloat(text.split(" ")[0].trim()) * 1024 * 1024;
+    }
+    return text;
+  };
+
+  sortTable(4, SortOrder.DESCENDING, fileSizeModifier);
+}
+
+/**
  * Sorts the table on Seedr column
  */
-function sortSeederTable() {
+function sortTableViaSeeder() {
   let pos = 1;
-  $("th").each((index, th) => {
+  document.querySelectorAll("th").forEach((th, index) => {
     if (th.classList.contains("coll-2")) {
       pos = index;
     }
   });
-  sortTable(pos);
+  sortTable(pos, SortOrder.DESCENDING, parseInt);
 }
 
 /**
  * Sorts the table on Leecher column
  */
-function sortLeechTable() {
+function sortTableViaLeechers() {
   let pos = 2;
-  $("th").each((index, th) => {
+  document.querySelectorAll("th").forEach((th, index) => {
     if (th.classList.contains("coll-3")) {
       pos = index;
     }
   });
-  sortTable(pos);
+  sortTable(pos, SortOrder.DESCENDING, parseInt);
 }
 
 /**
  * Selects or deselects all checkboxes for torrent selection
  */
 function toggleCheckedTorrents() {
-  const checked = $<HTMLInputElement>(".torrent-helper-all")[0].checked;
+  const checked = !!document.querySelector<HTMLInputElement>(
+    ".torrent-helper-all"
+  )?.checked;
   const allInputHelpers = document.querySelectorAll<HTMLInputElement>(
     "input.torrent-helper"
   );
@@ -143,9 +203,12 @@ function insertMagnetRows() {
  */
 function main() {
   $(".table-list.table.table-responsive.table-striped").attr("id", "mytable");
-  $("th.coll-2").on("click", sortSeederTable);
-  $("th.coll-3").on("click", sortLeechTable);
-  $("th.coll-5").on("click", sortTableUploader);
+  // $("th.coll-1").on("click", sortTableViaName);
+  // $("th.coll-date").on("click", sortTableViaDate);
+  $("th.coll-2").on("click", sortTableViaSeeder);
+  $("th.coll-3").on("click", sortTableViaLeechers);
+  $("th.coll-5").on("click", sortTableViaUploader);
+  $("th.coll-4").on("click", sortTableViaSize);
 }
 
 /**

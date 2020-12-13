@@ -1,9 +1,9 @@
 {
   "name": "1337-ext",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "scripts": {
     "dev": "(rm -rf dist || true) && parcel watch src/background.ts src/content.ts",
-    "build": "(rm -rf dist || true) && parcel build src/background.ts src/content.ts"
+    "build": "(rm -rf dist || true) && parcel build --no-source-maps src/background.ts src/content.ts"
   },
   "author": "rishav394",
   "license": "MIT",
