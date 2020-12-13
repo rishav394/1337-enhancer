@@ -205,10 +205,10 @@ function main() {
   $(".table-list.table.table-responsive.table-striped").attr("id", "mytable");
   // $("th.coll-1").on("click", sortTableViaName);
   // $("th.coll-date").on("click", sortTableViaDate);
-  $("th.coll-2").on("click", sortTableViaSeeder);
-  $("th.coll-3").on("click", sortTableViaLeechers);
-  $("th.coll-5").on("click", sortTableViaUploader);
-  $("th.coll-4").on("click", sortTableViaSize);
+  $("th.coll-2").on("click", sortTableViaSeeder).css("cursor", "pointer");
+  $("th.coll-3").on("click", sortTableViaLeechers).css("cursor", "pointer");
+  $("th.coll-5").on("click", sortTableViaUploader).css("cursor", "pointer");
+  $("th.coll-4").on("click", sortTableViaSize).css("cursor", "pointer");
 }
 
 /**

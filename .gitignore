@@ -8,3 +8,4 @@ src.pem
 node_modules
 dist
 .cache
+*.zip
