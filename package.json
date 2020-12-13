@@ -4,13 +4,11 @@
   "scripts": {
     "dev": "(rm -rf dist || true) && parcel watch src/background.ts src/content.ts",
     "build": "(rm -rf dist || true) && parcel build --no-source-maps src/background.ts src/content.ts",
-    "zip": "(rm -rf *.zip || true) && bestzip build.zip dist/* icon* manifest.json"
+    "zip": "(rm -rf *.zip || true) && npm run build && bestzip build.zip dist/* icon* manifest.json"
   },
   "author": "rishav394",
   "license": "MIT",
-  "dependencies": {
-    "jquery": "^3.5.1"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/chrome": "0.0.126",
     "@types/jquery": "^3.5.4",
