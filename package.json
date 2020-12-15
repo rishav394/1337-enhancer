@@ -1,13 +1,24 @@
 {
-  "name": "1337-ext",
+  "name": "1337-enhancer",
   "description": "A zero dependency chrome extension for enhancing user experience on 1337x torrent sites",
-  "version": "1.1.0",
+  "version": "2.0",
   "scripts": {
     "dev": "(rm -rf dist || true) && parcel watch src/background.ts src/content.ts",
     "build": "(rm -rf dist || true) && parcel build --no-source-maps src/background.ts src/content.ts",
     "zip": "(rm -rf *.zip || true) && npm run build && bestzip build.zip dist/* icon* manifest.json"
   },
+  "contributors": [
+    "rishav394"
+  ],
   "author": "rishav394",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rishav394/1337-enhancer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rishav394/1337-enhancer/issues",
+    "email": "rishav394@gmail.com"
+  },
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {

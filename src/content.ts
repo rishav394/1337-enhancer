@@ -8,7 +8,7 @@ import { copyTextToClipboard, htmlToElement } from "./util";
  * Sort the table on the basis of the row
  * @param columnPosition Row position of the row being sorted
  * @param sortOrder Controls the table sorting order.
- * @param modifier A function which is called upon every row element before comparision
+ * @param modifier A function which is called upon every row element before comparison
  * @param table The parent enclosing function
  */
 function sortTable(
@@ -132,7 +132,7 @@ function sortTableViaSize(this: HTMLTableHeaderCellElement) {
 }
 
 /**
- * Sorts the table on Seedr column
+ * Sorts the table on Seeders column
  */
 function sortTableViaSeeder(this: HTMLTableHeaderCellElement) {
   let pos = 1;
@@ -147,7 +147,7 @@ function sortTableViaSeeder(this: HTMLTableHeaderCellElement) {
 }
 
 /**
- * Sorts the table on Leecher column
+ * Sorts the table on Leechers column
  */
 function sortTableViaLeechers(this: HTMLTableHeaderCellElement) {
   let pos = 2;
@@ -171,7 +171,7 @@ function toggleCheckedTorrents() {
   const allInputHelpers = document.querySelectorAll<HTMLInputElement>(
     "input.torrent-helper"
   );
-  allInputHelpers.forEach((elememnt) => (elememnt.checked = checked));
+  allInputHelpers.forEach((element) => (element.checked = checked));
 }
 
 /**
@@ -199,7 +199,7 @@ function insertMagnetRows() {
 /**
  * On click event listener adding helper for headers
  * @param selector Css selector for the header
- * @param eventListener The event listener on the eheader
+ * @param eventListener The event listener on the header
  */
 function addHeaderClickListener(selector: string, eventListener: () => void) {
   document
@@ -221,7 +221,7 @@ function main() {
 }
 
 chrome.runtime.onMessage.addListener((msg: ChromeMessage) => {
-  let copytext = "";
+  let copyText = "";
 
   switch (msg.action) {
     case ChromeMessageActionType.COPY_SELECTED: {
@@ -233,10 +233,10 @@ chrome.runtime.onMessage.addListener((msg: ChromeMessage) => {
       );
       allInputs.forEach((value, key) => {
         if (value.checked) {
-          copytext += allLinks[key].href + "\n";
+          copyText += allLinks[key].href + "\n";
         }
       });
-      copyTextToClipboard(copytext);
+      copyTextToClipboard(copyText);
       break;
     }
     case ChromeMessageActionType.FETCH_MAGNETS: {
