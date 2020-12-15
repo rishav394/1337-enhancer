@@ -1,25 +1,41 @@
-import { loadingGif } from "./constants";
+import { htmlToElement } from "./util";
 
 let thatTimeout: number;
 
-function popupMountEnterListener(element: HTMLElement) {
+function getLastImage(element: Element | null) {
+  if (!element) {
+    return undefined;
+  }
+  const imageLinks = element.querySelectorAll<HTMLImageElement>("img");
+  // TODO:: This needs better logic
+  return imageLinks[imageLinks.length - 1].dataset.original;
+}
+
+function popupMountEnterListener(element: HTMLAnchorElement) {
   thatTimeout = setTimeout(() => {
     const popup = document.createElement("div");
     const image = document.createElement("img");
-    popup.append(image);
     image.classList.add("temp-popup-main-image");
-    image.src = loadingGif;
-    image.style.height = "70px";
-    fetch(
-      `https://picsum.photos/${Math.floor(Math.random() * 1000)}/${Math.floor(
-        Math.random() * 1000
-      )}`
-    ).then((value) =>
-      value.blob().then((blob) => {
-        image.src = window.URL.createObjectURL(blob);
-        image.style.height = "100%";
-      })
-    );
+    popup.append(image);
+    fetch(element.href)
+      .then((response) =>
+        response.text().then((value) => {
+          const lastImage = getLastImage(
+            htmlToElement(value).querySelector("div.tab-pane.active")
+          );
+          if (lastImage) {
+            image.onload = () => {
+              image.style.height = "100%";
+            };
+            image.src = lastImage;
+            image.onerror = popupMouseLeaveListener;
+          } else {
+            popupMouseLeaveListener();
+          }
+        })
+      )
+      .catch(popupMouseLeaveListener);
+
     popup.classList.add("temp-popup");
     element.parentNode?.append(popup);
     let steps = 0;
@@ -50,7 +66,7 @@ function popupMouseLeaveListener() {
 
 export function initHoverPopups() {
   document
-    .querySelectorAll<HTMLTableDataCellElement>("td.coll-1 a:not(.icon)")
+    .querySelectorAll<HTMLAnchorElement>("td.coll-1 a:not(.icon)")
     .forEach((element) => {
       element.addEventListener("mouseenter", () =>
         popupMountEnterListener(element)
