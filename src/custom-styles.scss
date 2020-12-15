@@ -1,0 +1,61 @@
+$popupWidth: 200px;
+$popupPadding: 8px;
+
+td div.temp-popup {
+  border: 2px solid pink;
+  background: white;
+  width: $popupWidth;
+  position: absolute;
+  z-index: 1;
+  opacity: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  margin-top: 10px;
+  padding: $popupPadding;
+  border-radius: 4px;
+  text-align: center;
+}
+
+td div.temp-popup::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  top: -20px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent pink transparent;
+}
+
+.temp-popup .temp-popup-main-image {
+  width: calc(#{$popupWidth} - #{2 * ($popupPadding + 3px)});
+}
+
+th.coll-2,
+th.coll-3,
+th.coll-4,
+th.coll-5 {
+  cursor: pointer;
+}
+
+input.torrent-helper {
+  margin-right: -23px;
+  z-index: 3;
+}
+
+a.torrent-helper {
+  text-align: end;
+}
+
+.magnet-image {
+  width: 40%;
+  height: 40%;
+}
+
+.torrent-helper-all {
+  margin-right: 7px;
+}
