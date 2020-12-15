@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
-  "name": "Torrent helper",
-  "version": "2.5",
+  "name": "1337 enhancer",
+  "version": "2.5.5",
   "description": "A zero dependency chrome extension for enhancing your user experience on 1337x torrent sites",
   "icons": {
     "16": "icon-16.png",
