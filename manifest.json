@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "Torrent helper",
-  "version": "2.4",
-  "description": "Adds a handy magnet link directly next to torrent list at https://1337.root.yt/",
+  "version": "2.5",
+  "description": "A zero dependency chrome extension for enhancing your user experience on 1337x torrent sites",
   "icons": {
     "16": "icon-16.png",
     "48": "icon-48.png",
@@ -31,11 +31,14 @@
         "*://1337x.is/*",
         "*://1337x.gd/*"
       ],
-      "js": ["dist/content.js"]
+      "js": ["dist/content.js"],
+      "css": ["dist/content.css"],
+      "all_frames": true
     }
   ],
   "background": {
     "persistent": false,
-    "scripts": ["dist/background.js"]
+    "scripts": ["dist/background.js"],
+    "css": ["dist/content.css"]
   }
 }
