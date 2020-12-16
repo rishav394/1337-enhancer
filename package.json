@@ -1,7 +1,7 @@
 {
   "name": "1337-enhancer",
   "description": "A zero dependency chrome extension for enhancing user experience on 1337x torrent sites",
-  "version": "2.0",
+  "version": "2.0.0",
   "scripts": {
     "dev": "(rm -rf dist || true) && parcel watch src/background.ts src/content.ts",
     "build": "(rm -rf dist || true) && parcel build --no-source-maps src/background.ts src/content.ts",

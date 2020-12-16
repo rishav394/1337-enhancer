@@ -37,6 +37,6 @@ Any help, suggestion, contribution, criticism etc are welcome.
 ## Read before submitting a PR
 - Its okay if your PR breaks the *zero dependency theme* as long as its worth it.
 - Avoid JQuery, lodash, axios at all costs. Why? Everything they can do, vanilla JS can do with more code.
-- Avoid loading script scripts from cdns. Use NPM packages instead.  
+- Avoid loading scripts from cdns. Use NPM packages instead.  
 
 For support feel free to create an [Issue](https://github.com/rishav394/1337-enhancer/issues)
