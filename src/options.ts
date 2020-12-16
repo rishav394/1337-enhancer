@@ -4,14 +4,15 @@ import { defaultSettings, Features } from "./types";
 function restore_options() {
   chrome.storage.sync.get(defaultSettings, (items) => {
     Object.keys(items).forEach((option) => {
-      const element = document.getElementById(option);
+      const element = document.getElementById(
+        option
+      ) as HTMLInputElement | null;
       if (element) {
-        switch (typeof items[option]) {
-          case "boolean":
-            (element as HTMLInputElement).checked = items[option];
-            break;
-          default:
-            break;
+        if (element.type === "checkbox") {
+          // It is a checkbox. Changes `checked`
+          element.checked = items[option];
+        } else {
+          element.value = items[option];
         }
       }
     });
@@ -22,14 +23,12 @@ function save_options() {
   const finalSettings: { [option: string]: any } = {};
 
   Object.values(Features).forEach((option) => {
-    const element = document.getElementById(option);
+    const element = document.getElementById(option) as HTMLInputElement | null;
     if (element) {
-      switch (typeof defaultSettings[option]) {
-        case "boolean":
-          finalSettings[option] = (element as HTMLInputElement).checked;
-          break;
-        default:
-          break;
+      if (element.type === "checkbox") {
+        finalSettings[option] = element.checked;
+      } else {
+        finalSettings[option] = element.value;
       }
     }
   });
@@ -38,11 +37,9 @@ function save_options() {
     var status = document.getElementById("status");
     if (status) {
       status.textContent = "Options saved.";
-      setTimeout(function () {
-        if (status) {
-          status.innerHTML = "&nbsp;";
-        }
-      }, 750);
+      setTimeout(() => {
+        window.close();
+      }, 1200);
     }
   });
 }

@@ -7,7 +7,8 @@ A zero dependency chrome extension which enhances the over all user experience i
 2. Allows batch copying magnet links.
 3. Adds a new column to the table with the magnet link to the torrent.
 4. Adds the screenshot from the torrent description to a popup on hovering.
-5. Many more... 
+5. Customizable options. For example, disable hover popups or specifying the width of the popup.
+6. Many more... 
 
 ## Building locally
 - Clone or download the repo `git clone https://github.com/rishav394/1337-enhancer.git` 
@@ -26,7 +27,6 @@ A zero dependency chrome extension which enhances the over all user experience i
 
 ## Current plans
 - [ ] Convert manifest to version 3
-- [ ] Add customization to the extension. For example, disabling hover or specifying the width.
 - [ ] Implement React based popup
 
 ## Contribution

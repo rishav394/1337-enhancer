@@ -23,6 +23,11 @@
 body {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   overflow: hidden;
+  margin-top: 0;
+
+  h3 {
+    margin-top: 0;
+  }
 }
 
 .switch {
@@ -93,4 +98,46 @@ button {
   border-width: 1px;
   border-color: black;
   background: gainsboro;
+}
+
+select.custom-select {
+  background: #2196f3;
+  font-size: large;
+  border: 0;
+  border-radius: 0.11rem;
+  color: white;
+  width: 7rem;
+
+  option {
+    background: #ddf0ff;
+    color: black;
+  }
+}
+
+input:not([type="checkbox"]) {
+  border: none;
+  border-bottom: 1px solid gray;
+  width: 5rem;
+  font-size: large;
+}
+
+input#POPUP_WIDTH {
+  margin-right: 0.4rem;
+  text-align: right;
+  padding-right: 0;
+}
+
+span {
+  font-size: medium;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }

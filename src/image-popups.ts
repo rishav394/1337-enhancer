@@ -1,14 +1,39 @@
+import { Features, OptionTypes } from "./types";
 import { htmlToElement } from "./util";
 
 let thatTimeout: number;
+let popupIndexLocation: string;
+let popupWidth: number;
 
-function getLastImage(element: Element | null) {
+chrome.storage.sync.get((storageItems) => {
+  const items = storageItems as OptionTypes;
+  popupIndexLocation = items[Features.POPUP_IMAGE_INDEX];
+  popupWidth = items[Features.POPUP_WIDTH];
+});
+
+function getImage(element: Element | null) {
   if (!element) {
     return undefined;
   }
   const imageLinks = element.querySelectorAll<HTMLImageElement>("img");
-  // TODO:: This needs better logic
-  return imageLinks[imageLinks.length - 1].dataset.original;
+  if (imageLinks.length <= 1) {
+    return imageLinks[0].dataset.original;
+  }
+  switch (popupIndexLocation) {
+    case "first": {
+      return imageLinks[0].dataset.original;
+    }
+    case "last": {
+      return imageLinks[imageLinks.length - 1].dataset.original;
+    }
+    case "middle": {
+      return imageLinks[imageLinks.length / 2].dataset.original;
+    }
+    case "random":
+    default: {
+      return imageLinks[~~(Math.random() * imageLinks.length)].dataset.original;
+    }
+  }
 }
 
 function popupMountEnterListener(element: HTMLAnchorElement) {
@@ -16,18 +41,20 @@ function popupMountEnterListener(element: HTMLAnchorElement) {
     const popup = document.createElement("div");
     const image = document.createElement("img");
     image.classList.add("temp-popup-main-image");
+    image.style.width = `${(90 / 100) * popupWidth}px`;
     popup.append(image);
     fetch(element.href)
       .then((response) =>
         response.text().then((value) => {
-          const lastImage = getLastImage(
+          const bestImage = getImage(
             htmlToElement(value).querySelector("div.tab-pane.active")
           );
-          if (lastImage) {
+          if (bestImage) {
             image.onload = () => {
               image.style.height = "100%";
             };
-            image.src = lastImage;
+            image.src = bestImage;
+            image.style.background = "none";
             image.onerror = popupMouseLeaveListener;
           } else {
             popupMouseLeaveListener();
@@ -37,6 +64,7 @@ function popupMountEnterListener(element: HTMLAnchorElement) {
       .catch(popupMouseLeaveListener);
 
     popup.classList.add("temp-popup");
+    popup.style.width = `${popupWidth}px`;
     element.parentNode?.append(popup);
     let steps = 0;
     const timer = setInterval(function () {
