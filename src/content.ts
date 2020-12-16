@@ -1,7 +1,13 @@
 import { magnetBase64 } from "./constants";
-import "./custom-styles.scss";
+import "./content-styles.scss";
 import { initHoverPopups } from "./image-popups";
-import { ChromeMessage, ChromeMessageActionType, SortOrder } from "./types";
+import {
+  ChromeMessage,
+  ChromeMessageActionType,
+  Features,
+  OptionTypes,
+  SortOrder,
+} from "./types";
 import { copyTextToClipboard, htmlToElement } from "./util";
 
 /**
@@ -213,11 +219,16 @@ function addHeaderClickListener(selector: string, eventListener: () => void) {
  * Entry function
  */
 function main() {
-  initHoverPopups();
-  addHeaderClickListener("th.coll-2", sortTableViaSeeder);
-  addHeaderClickListener("th.coll-3", sortTableViaLeechers);
-  addHeaderClickListener("th.coll-4", sortTableViaSize);
-  addHeaderClickListener("th.coll-5", sortTableViaUploader);
+  chrome.storage.sync.get((storageItems) => {
+    const items = storageItems as OptionTypes;
+    items[Features.HOVER_POPUP] && initHoverPopups();
+    if (items[Features.SORTING]) {
+      addHeaderClickListener("th.coll-2", sortTableViaSeeder);
+      addHeaderClickListener("th.coll-3", sortTableViaLeechers);
+      addHeaderClickListener("th.coll-4", sortTableViaSize);
+      addHeaderClickListener("th.coll-5", sortTableViaUploader);
+    }
+  });
 }
 
 chrome.runtime.onMessage.addListener((msg: ChromeMessage) => {
