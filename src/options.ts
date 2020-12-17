@@ -1,5 +1,6 @@
+import { defaultSettings } from "./constants";
 import "./options-styles.scss";
-import { defaultSettings, Features } from "./types";
+import { OptionKeys } from "./types";
 
 function restore_options() {
   chrome.storage.sync.get(defaultSettings, (items) => {
@@ -22,7 +23,7 @@ function restore_options() {
 function save_options() {
   const finalSettings: { [option: string]: any } = {};
 
-  Object.values(Features).forEach((option) => {
+  Object.values(OptionKeys).forEach((option) => {
     const element = document.getElementById(option) as HTMLInputElement | null;
     if (element) {
       if (element.type === "checkbox") {

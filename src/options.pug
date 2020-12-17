@@ -3,7 +3,8 @@ head
   title 1337 enhancer settings
 h3 Settings
 .container
-  // There has to be a better/more generic way to make these rows using JS
+  //- There has to be a better/more generic way to make these rows using JS
+  //- And to pick the values from types
   .row
     .heading Enable popups on hover
     label.switch
@@ -12,10 +13,10 @@ h3 Settings
   .row
     .heading Hover popup image index
     select#POPUP_IMAGE_INDEX.custom-select
-      option(value='first') First
-      option(value='last') Last
-      option(value='middle') Middle
-      option(value='random') Random
+      option(value='FIRST') First
+      option(value='LAST') Last
+      option(value='MIDDLE') Middle
+      option(value='RANDOM') Random
   .row
     .heading Popup width
     div

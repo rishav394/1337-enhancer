@@ -27,6 +27,7 @@ A zero dependency chrome extension which enhances the over all user experience i
 
 ## Current plans
 - [ ] Convert manifest to version 3
+- [ ] Make pug file generic that auto makes rows and values according to option types
 - [ ] Implement React based popup
 
 ## Contribution

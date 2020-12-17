@@ -14,23 +14,23 @@ export enum SortOrder {
   DESCENDING = "DESCENDING",
 }
 
-export enum Features {
+export enum OptionKeys {
   HOVER_POPUP = "HOVER_POPUP",
   SORTING = "SORTING",
   POPUP_IMAGE_INDEX = "POPUP_IMAGE_INDEX",
   POPUP_WIDTH = "POPUP_WIDTH",
 }
 
-export type OptionTypes = {
-  [Features.HOVER_POPUP]: boolean;
-  [Features.SORTING]: boolean;
-  [Features.POPUP_IMAGE_INDEX]: "first" | "last" | "middle" | "random";
-  [Features.POPUP_WIDTH]: number;
-};
+export enum PopupImageIndexType {
+  "FIRST" = "FIRST",
+  "LAST" = "LAST",
+  "MIDDLE" = "MIDDLE",
+  "RANDOM" = "RANDOM",
+}
 
-export const defaultSettings: OptionTypes = {
-  [Features.HOVER_POPUP]: true,
-  [Features.SORTING]: true,
-  [Features.POPUP_IMAGE_INDEX]: "last",
-  [Features.POPUP_WIDTH]: 300,
+export type OptionTypes = {
+  [OptionKeys.HOVER_POPUP]: boolean;
+  [OptionKeys.SORTING]: boolean;
+  [OptionKeys.POPUP_IMAGE_INDEX]: PopupImageIndexType;
+  [OptionKeys.POPUP_WIDTH]: number;
 };

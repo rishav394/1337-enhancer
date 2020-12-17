@@ -1,14 +1,15 @@
-import { Features, OptionTypes } from "./types";
+import { defaultSettings } from "./constants";
+import { OptionKeys, OptionTypes, PopupImageIndexType } from "./types";
 import { htmlToElement } from "./util";
 
-let thatTimeout: number;
-let popupIndexLocation: string;
+let popupRenderTimeout: number;
+let popupIndexLocation: PopupImageIndexType;
 let popupWidth: number;
 
 chrome.storage.sync.get((storageItems) => {
   const items = storageItems as OptionTypes;
-  popupIndexLocation = items[Features.POPUP_IMAGE_INDEX];
-  popupWidth = items[Features.POPUP_WIDTH];
+  popupIndexLocation = items[OptionKeys.POPUP_IMAGE_INDEX];
+  popupWidth = items[OptionKeys.POPUP_WIDTH];
 });
 
 function getImage(element: Element | null) {
@@ -19,29 +20,43 @@ function getImage(element: Element | null) {
   if (imageLinks.length <= 1) {
     return imageLinks[0].dataset.original;
   }
-  switch (popupIndexLocation) {
-    case "first": {
-      return imageLinks[0].dataset.original;
-    }
-    case "last": {
-      return imageLinks[imageLinks.length - 1].dataset.original;
-    }
-    case "middle": {
-      return imageLinks[imageLinks.length / 2].dataset.original;
-    }
-    case "random":
-    default: {
-      return imageLinks[~~(Math.random() * imageLinks.length)].dataset.original;
+
+  return getImageForIndex(popupIndexLocation);
+
+  function getImageForIndex(
+    popupIndexLocation: PopupImageIndexType
+  ): string | undefined {
+    switch (popupIndexLocation) {
+      case PopupImageIndexType.FIRST: {
+        return imageLinks[0].dataset.original;
+      }
+      case PopupImageIndexType.LAST: {
+        return imageLinks[imageLinks.length - 1].dataset.original;
+      }
+      case PopupImageIndexType.MIDDLE: {
+        return imageLinks[imageLinks.length / 2].dataset.original;
+      }
+      case PopupImageIndexType.RANDOM: {
+        return imageLinks[~~(Math.random() * imageLinks.length)].dataset
+          .original;
+      }
+      default: {
+        chrome.storage.sync.set({
+          [OptionKeys.POPUP_IMAGE_INDEX]:
+            defaultSettings[OptionKeys.POPUP_IMAGE_INDEX],
+        });
+        return getImageForIndex(defaultSettings[OptionKeys.POPUP_IMAGE_INDEX]);
+      }
     }
   }
 }
 
 function popupMountEnterListener(element: HTMLAnchorElement) {
-  thatTimeout = setTimeout(() => {
+  popupRenderTimeout = setTimeout(() => {
     const popup = document.createElement("div");
     const image = document.createElement("img");
     image.classList.add("temp-popup-main-image");
-    image.style.width = `${(90 / 100) * popupWidth}px`;
+    image.style.width = `${(93 / 100) * popupWidth}px`;
     popup.append(image);
     fetch(element.href)
       .then((response) =>
@@ -78,7 +93,7 @@ function popupMountEnterListener(element: HTMLAnchorElement) {
 }
 
 function popupMouseLeaveListener() {
-  thatTimeout && clearTimeout(thatTimeout);
+  popupRenderTimeout && clearTimeout(popupRenderTimeout);
   document.querySelectorAll<HTMLDivElement>(".temp-popup").forEach((popup) => {
     let steps = 10;
     const timer = setInterval(function () {

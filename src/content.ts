@@ -4,7 +4,7 @@ import { initHoverPopups } from "./image-popups";
 import {
   ChromeMessage,
   ChromeMessageActionType,
-  Features,
+  OptionKeys,
   OptionTypes,
   SortOrder,
 } from "./types";
@@ -221,8 +221,8 @@ function addHeaderClickListener(selector: string, eventListener: () => void) {
 function main() {
   chrome.storage.sync.get((storageItems) => {
     const items = storageItems as OptionTypes;
-    items[Features.HOVER_POPUP] && initHoverPopups();
-    if (items[Features.SORTING]) {
+    items[OptionKeys.HOVER_POPUP] && initHoverPopups();
+    if (items[OptionKeys.SORTING]) {
       addHeaderClickListener("th.coll-2", sortTableViaSeeder);
       addHeaderClickListener("th.coll-3", sortTableViaLeechers);
       addHeaderClickListener("th.coll-4", sortTableViaSize);
