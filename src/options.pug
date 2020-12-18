@@ -2,32 +2,9 @@ doctype html
 head
   title 1337 enhancer settings
 h3 Settings
-.container
-  //- There has to be a better/more generic way to make these rows using JS
-  //- And to pick the values from types
-  .row
-    .heading Enable popups on hover
-    label.switch
-      input#HOVER_POPUP(type='checkbox')
-      span.slider.round
-  .row
-    .heading Hover popup image index
-    select#POPUP_IMAGE_INDEX.custom-select
-      option(value='FIRST') First
-      option(value='LAST') Last
-      option(value='MIDDLE') Middle
-      option(value='RANDOM') Random
-  .row
-    .heading Popup width
-    div
-      input#POPUP_WIDTH(type='number',min=100,max=800)
-      span px
-  .row
-    .heading Enable sorting
-    label.switch
-      input#SORTING(type='checkbox')
-      span.slider.round
+.container#root
 #status &nbsp;
 .row
   button#save Save
+  button#reset Reset
 script(src='options.ts')

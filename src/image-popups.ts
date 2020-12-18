@@ -1,3 +1,4 @@
+import loadingImage from "./assets/loading.svg";
 import { defaultSettings } from "./constants";
 import { OptionKeys, OptionTypes, PopupImageIndexType } from "./types";
 import { htmlToElement } from "./util";
@@ -12,6 +13,10 @@ chrome.storage.sync.get((storageItems) => {
   popupWidth = items[OptionKeys.POPUP_WIDTH];
 });
 
+/**
+ * Returns the image from screenshots from the torrent
+ * @param element The torrent description body where images will be looked up
+ */
 function getImage(element: Element | null) {
   if (!element) {
     return undefined;
@@ -23,6 +28,10 @@ function getImage(element: Element | null) {
 
   return getImageForIndex(popupIndexLocation);
 
+  /**
+   * Returns the src for the selected image
+   * @param popupIndexLocation The user index of the image to choose from
+   */
   function getImageForIndex(
     popupIndexLocation: PopupImageIndexType
   ): string | undefined {
@@ -51,11 +60,17 @@ function getImage(element: Element | null) {
   }
 }
 
+/**
+ * Mouse enter listener
+ * @param element The anchor tag to bind the event
+ */
 function popupMountEnterListener(element: HTMLAnchorElement) {
   popupRenderTimeout = setTimeout(() => {
     const popup = document.createElement("div");
     const image = document.createElement("img");
     image.classList.add("temp-popup-main-image");
+    const loadingSource = chrome.extension.getURL("dist/" + loadingImage);
+    image.style.backgroundImage = `url("${loadingSource}")`;
     image.style.width = `${(93 / 100) * popupWidth}px`;
     popup.append(image);
     fetch(element.href)
@@ -92,6 +107,9 @@ function popupMountEnterListener(element: HTMLAnchorElement) {
   }, 100);
 }
 
+/**
+ * Mouse leave listener
+ */
 function popupMouseLeaveListener() {
   popupRenderTimeout && clearTimeout(popupRenderTimeout);
   document.querySelectorAll<HTMLDivElement>(".temp-popup").forEach((popup) => {
@@ -107,6 +125,9 @@ function popupMouseLeaveListener() {
   });
 }
 
+/**
+ * Main function
+ */
 export function initHoverPopups() {
   document
     .querySelectorAll<HTMLAnchorElement>("td.coll-1 a:not(.icon)")

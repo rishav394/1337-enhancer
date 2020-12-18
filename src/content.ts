@@ -1,4 +1,4 @@
-import { magnetBase64 } from "./constants";
+import magnetImage from "./assets/magnet.jpg";
 import "./content-styles.scss";
 import { initHoverPopups } from "./image-popups";
 import {
@@ -65,14 +65,24 @@ function renderMagnetInDom(html: string, index: number) {
   );
   const magnet = magnetElement?.href;
   const uploader = uploaderElement?.text;
-  document.querySelectorAll("td.torrent-helper-td")[index].innerHTML = `
-    <div style="display: flex;">
-    <input class="torrent-helper" type="checkbox" />
-    <a class="torrent-helper" href="${magnet}" data-target="${uploader}">
-    <img class="magnet-image" src="${magnetBase64}" />
-    </a>
-    </div>
-    `;
+
+  const div = document.createElement("div");
+  div.style.display = "flex";
+  const input = document.createElement("input");
+  input.type = "checkbox";
+  input.classList.add("torrent-helper");
+  const anchor = document.createElement("a");
+  anchor.classList.add("torrent-helper");
+  anchor.href = magnet || "";
+  anchor.setAttribute("data-target", uploader || "");
+  const image = document.createElement("img");
+  image.classList.add("magnet-image");
+  const magnetSource = chrome.extension.getURL("dist/" + magnetImage);
+  image.src = magnetSource;
+
+  anchor.append(image);
+  div.append(input, anchor);
+  document.querySelectorAll("td.torrent-helper-td")[index].append(div);
 }
 
 /**

@@ -13,6 +13,7 @@
     "open_in_tab": false
   },
   "permissions": ["contextMenus", "storage"],
+  "web_accessible_resources": ["dist/*.jpg", "dist/*.svg"],
   "content_scripts": [
     {
       "matches": [
