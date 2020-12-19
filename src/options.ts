@@ -6,20 +6,28 @@ import { OptionKeys, PopupImageIndexType } from "./types";
  * Restores saves settings to the user form
  */
 function restore_options() {
-  chrome.storage.sync.get(defaultSettings, (items) => {
-    Object.keys(items).forEach((option) => {
-      const element = document.getElementById(
-        option
-      ) as HTMLInputElement | null;
-      if (element) {
-        if (element.type === "checkbox") {
-          // It is a checkbox. Changes `checked`
-          element.checked = items[option];
-        } else {
-          element.value = items[option];
+  chrome.storage.sync.get((items) => {
+    // background script makes sure this doesn't happen but ¯\_(ツ)_/¯
+    if (
+      !items ||
+      (Object.keys(items).length === 0 && items.constructor === Object)
+    ) {
+      saveSettings(defaultSettings, "", reset_options);
+    } else {
+      Object.keys(items).forEach((option) => {
+        const element = document.getElementById(
+          option
+        ) as HTMLInputElement | null;
+        if (element) {
+          if (element.type === "checkbox") {
+            // It is a checkbox. Changes `checked`
+            element.checked = items[option];
+          } else {
+            element.value = items[option];
+          }
         }
-      }
-    });
+      });
+    }
   });
 }
 
