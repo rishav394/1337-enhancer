@@ -1,4 +1,4 @@
-import loadingImage from "./assets/loading.svg";
+import loadingImage from "url:./assets/loading.svg";
 import { defaultSettings } from "./constants";
 import { OptionKeys, OptionTypes, PopupImageIndexType } from "./types";
 import { htmlToElement } from "./util";
@@ -6,6 +6,8 @@ import { htmlToElement } from "./util";
 let popupRenderTimeout: number;
 let popupIndexLocation: PopupImageIndexType;
 let popupWidth: number;
+
+console.log("loadingImage value:", loadingImage);
 
 chrome.storage.sync.get((storageItems) => {
   const items = storageItems as OptionTypes;
@@ -21,9 +23,10 @@ function getImage(element: Element | null) {
   if (!element) {
     return undefined;
   }
-  const imageLinks = element.querySelectorAll<HTMLImageElement>("img");
+  const imageLinks = Array.from(element.querySelectorAll<HTMLImageElement>("img"))
+    .filter(img => (img.dataset.original || img.src) && !img.src.includes("histats") && !img.src.includes("logo"));
   if (imageLinks.length <= 1) {
-    return imageLinks[0].dataset.original;
+    return imageLinks[0]?.dataset.original || imageLinks[0]?.src;
   }
 
   return getImageForIndex(popupIndexLocation);
@@ -37,17 +40,18 @@ function getImage(element: Element | null) {
   ): string | undefined {
     switch (popupIndexLocation) {
       case PopupImageIndexType.FIRST: {
-        return imageLinks[0].dataset.original;
+        return imageLinks[0].dataset.original || imageLinks[0].src;
       }
       case PopupImageIndexType.LAST: {
-        return imageLinks[imageLinks.length - 1].dataset.original;
+        return imageLinks[imageLinks.length - 1].dataset.original || imageLinks[imageLinks.length - 1].src;
       }
       case PopupImageIndexType.MIDDLE: {
-        return imageLinks[imageLinks.length / 2].dataset.original;
+        const mid = Math.floor(imageLinks.length / 2);
+        return imageLinks[mid].dataset.original || imageLinks[mid].src;
       }
       case PopupImageIndexType.RANDOM: {
-        return imageLinks[~~(Math.random() * imageLinks.length)].dataset
-          .original;
+        const rand = imageLinks[~~(Math.random() * imageLinks.length)];
+        return rand.dataset.original || rand.src;
       }
       default: {
         chrome.storage.sync.set({
@@ -69,8 +73,7 @@ function popupMountEnterListener(element: HTMLAnchorElement) {
     const popup = document.createElement("div");
     const image = document.createElement("img");
     image.classList.add("temp-popup-main-image");
-    const loadingSource = chrome.extension.getURL("dist/" + loadingImage);
-    image.style.backgroundImage = `url("${loadingSource}")`;
+    image.style.backgroundImage = `url("${loadingImage}")`;
     image.style.width = `${(93 / 100) * popupWidth}px`;
     popup.append(image);
     fetch(element.href)
