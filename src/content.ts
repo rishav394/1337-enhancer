@@ -17,9 +17,6 @@ import { copyTextToClipboard, htmlToElement } from "./util";
  * @param modifier A function which is called upon every row element before comparison
  * @param table The parent enclosing function
  */
-
-console.log("loadingImage value:", magnetImage);
-
 function sortTable(
   columnPosition: number,
   sortOrder: SortOrder,

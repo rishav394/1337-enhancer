@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "rimraf dist && parcel watch src/background.ts src/content.ts src/options.pug --public-url .",
     "build": "rimraf dist && parcel build --no-source-maps src/background.ts src/content.ts src/options.pug --public-url .",
-    "zip": "rimraf *.zip && npm run build && bestzip build.zip dist/* icon* manifest.json"
+    "zip": "rimraf --glob \"*.zip\" && npm run build && bestzip build.zip dist/* icon* manifest.json"
   },
   "contributors": [
     "rishav394"

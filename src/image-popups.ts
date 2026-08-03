@@ -7,8 +7,6 @@ let popupRenderTimeout: number;
 let popupIndexLocation: PopupImageIndexType;
 let popupWidth: number;
 
-console.log("loadingImage value:", loadingImage);
-
 chrome.storage.sync.get((storageItems) => {
   const items = storageItems as OptionTypes;
   popupIndexLocation = items[OptionKeys.POPUP_IMAGE_INDEX];
@@ -24,9 +22,10 @@ function getImage(element: Element | null) {
     return undefined;
   }
   const imageLinks = Array.from(element.querySelectorAll<HTMLImageElement>("img"))
-    .filter(img => (img.dataset.original || img.src) && !img.src.includes("histats") && !img.src.includes("logo"));
+    .map((img) => img.dataset.original || img.src)
+    .filter((url) => url && !url.includes("histats") && !url.includes("logo"));
   if (imageLinks.length <= 1) {
-    return imageLinks[0]?.dataset.original || imageLinks[0]?.src;
+    return imageLinks[0];
   }
 
   return getImageForIndex(popupIndexLocation);
@@ -40,18 +39,16 @@ function getImage(element: Element | null) {
   ): string | undefined {
     switch (popupIndexLocation) {
       case PopupImageIndexType.FIRST: {
-        return imageLinks[0].dataset.original || imageLinks[0].src;
+        return imageLinks[0];
       }
       case PopupImageIndexType.LAST: {
-        return imageLinks[imageLinks.length - 1].dataset.original || imageLinks[imageLinks.length - 1].src;
+        return imageLinks[imageLinks.length - 1];
       }
       case PopupImageIndexType.MIDDLE: {
-        const mid = Math.floor(imageLinks.length / 2);
-        return imageLinks[mid].dataset.original || imageLinks[mid].src;
+        return imageLinks[Math.floor(imageLinks.length / 2)];
       }
       case PopupImageIndexType.RANDOM: {
-        const rand = imageLinks[~~(Math.random() * imageLinks.length)];
-        return rand.dataset.original || rand.src;
+        return imageLinks[~~(Math.random() * imageLinks.length)];
       }
       default: {
         chrome.storage.sync.set({
