@@ -7,5 +7,6 @@ src.crx
 src.pem
 node_modules
 dist
-.cache
+.parcel-cache
+.idea
 *.zip

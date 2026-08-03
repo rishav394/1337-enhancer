@@ -18,6 +18,9 @@ A zero dependency chrome extension which enhances the over all user experience i
 ## Currently supported sites
 - [x] 1337.root.yt
 - [x] 1337x.to
+- [x] 1337xto.to
+- [x] 1337xx.to
+- [x] 1337xxx.to
 - [x] 1337x.st
 - [x] x1337x.ws
 - [x] x1337x.eu
@@ -26,7 +29,7 @@ A zero dependency chrome extension which enhances the over all user experience i
 - [x] 1337x.gd
 
 ## Current plans
-- [ ] Convert manifest to version 3
+- [x] Convert manifest to version 3
 - [ ] Make pug file generic that auto makes rows and values according to option types
 - [ ] Implement React based popup
 

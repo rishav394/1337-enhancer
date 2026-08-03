@@ -1,4 +1,4 @@
-import loadingImage from "./assets/loading.svg";
+import loadingImage from "url:./assets/loading.svg";
 import { defaultSettings } from "./constants";
 import { OptionKeys, OptionTypes, PopupImageIndexType } from "./types";
 import { htmlToElement } from "./util";
@@ -21,9 +21,11 @@ function getImage(element: Element | null) {
   if (!element) {
     return undefined;
   }
-  const imageLinks = element.querySelectorAll<HTMLImageElement>("img");
+  const imageLinks = Array.from(element.querySelectorAll<HTMLImageElement>("img"))
+    .map((img) => img.dataset.original || img.src)
+    .filter((url) => url && !url.includes("histats") && !url.includes("logo"));
   if (imageLinks.length <= 1) {
-    return imageLinks[0].dataset.original;
+    return imageLinks[0];
   }
 
   return getImageForIndex(popupIndexLocation);
@@ -37,17 +39,16 @@ function getImage(element: Element | null) {
   ): string | undefined {
     switch (popupIndexLocation) {
       case PopupImageIndexType.FIRST: {
-        return imageLinks[0].dataset.original;
+        return imageLinks[0];
       }
       case PopupImageIndexType.LAST: {
-        return imageLinks[imageLinks.length - 1].dataset.original;
+        return imageLinks[imageLinks.length - 1];
       }
       case PopupImageIndexType.MIDDLE: {
-        return imageLinks[imageLinks.length / 2].dataset.original;
+        return imageLinks[Math.floor(imageLinks.length / 2)];
       }
       case PopupImageIndexType.RANDOM: {
-        return imageLinks[~~(Math.random() * imageLinks.length)].dataset
-          .original;
+        return imageLinks[~~(Math.random() * imageLinks.length)];
       }
       default: {
         chrome.storage.sync.set({
@@ -69,8 +70,7 @@ function popupMountEnterListener(element: HTMLAnchorElement) {
     const popup = document.createElement("div");
     const image = document.createElement("img");
     image.classList.add("temp-popup-main-image");
-    const loadingSource = chrome.extension.getURL("dist/" + loadingImage);
-    image.style.backgroundImage = `url("${loadingSource}")`;
+    image.style.backgroundImage = `url("${loadingImage}")`;
     image.style.width = `${(93 / 100) * popupWidth}px`;
     popup.append(image);
     fetch(element.href)

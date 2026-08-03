@@ -1,4 +1,4 @@
-import magnetImage from "./assets/magnet.jpg";
+import magnetImage from "url:./assets/magnet.jpg";
 import "./content-styles.scss";
 import { initHoverPopups } from "./image-popups";
 import {
@@ -77,8 +77,7 @@ function renderMagnetInDom(html: string, index: number) {
   anchor.setAttribute("data-target", uploader || "");
   const image = document.createElement("img");
   image.classList.add("magnet-image");
-  const magnetSource = chrome.extension.getURL("dist/" + magnetImage);
-  image.src = magnetSource;
+  image.src = magnetImage;
 
   anchor.append(image);
   div.append(input, anchor);
